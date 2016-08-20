@@ -55,7 +55,8 @@ defmodule Indexer.Searcher do
             },
             %{
               field_value_factor: %{
-                field: "population"
+                field: "population",
+                factor: 0.1
               }
             }
           ]

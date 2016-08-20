@@ -6,11 +6,13 @@ defmodule Indexer.SearchController do
     {lon, _} = Float.parse(lon)
     {radius, _} = Integer.parse(radius)
     {:ok, results} = Indexer.Searcher.lat_lon_search(lat, lon, radius)
-    IO.inspect results
 
     results = results
     |> Enum.map(fn result ->
-      result["_source"]["name"]
+      %{
+        name: result["_source"]["name"],
+        score: result["_score"]
+      }
     end)
     |> :jiffy.encode([:use_nil])
 
