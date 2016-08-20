@@ -31,11 +31,11 @@ defmodule Indexer.SearchController do
       |> Enum.map(fn city ->
         %{
           name: city["_source"]["name"],
-          image_url: "http://example.org/foo.jpg"
+          coord: city["_source"]["location"]
         }
       end)
       %{
-        coord: coord,
+        query: coord,
         cities: cities
       }
     end)
