@@ -11,11 +11,16 @@ defmodule Indexer.SearchController do
     |> Enum.map(fn result ->
       %{
         name: result["_source"]["name"],
+        population: result["_source"]["population"],
         score: result["_score"]
       }
     end)
-    |> :jiffy.encode([:use_nil])
 
-    resp(conn, 200, results)
+    {:ok, json} = %{
+      cities: results
+    }
+    |> Poison.encode
+
+    resp(conn, 200, json)
   end
 end
