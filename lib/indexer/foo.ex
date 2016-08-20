@@ -12,6 +12,7 @@ defmodule Indexer.Foo do
     |> step_location
 
     coord_steps_by_distance(steps, step_distance) ++ [last_coord]
+    |> Enum.map(&dump_coord(&1))
     |> Enum.map(&run_search(&1))
   end
 
@@ -27,9 +28,9 @@ defmodule Indexer.Foo do
     |> Kernel.elem(1)
   end
 
-  defp run_search(coord, radius \\ 10) do
+  defp run_search(coord, radius \\ 50) do
     {:ok, results} = Indexer.Searcher.lat_lon_search(coord["lat"], coord["lng"], radius)
-    cities = results
+    results
     |> Enum.map(fn result ->
       %{
         name: result["_source"]["name"],
@@ -41,6 +42,11 @@ defmodule Indexer.Foo do
 
   defp step_location(step) do
     step["end_location"]
+  end
+
+  defp dump_coord(%{"lat" => lat, "lng" => lng} = coord) do
+    IO.puts "#{lat}, #{lng}"
+    coord
   end
 
   def read_data do
