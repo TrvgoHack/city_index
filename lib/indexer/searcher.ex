@@ -4,6 +4,7 @@ defmodule Indexer.Searcher do
   def lat_lon_search(lat, lon, distance) do
     query = lat_lon_query(lat, lon, distance)
     {:ok, body} = search(query)
+    body
   end
 
   def search(query) do

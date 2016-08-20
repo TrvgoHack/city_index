@@ -8,6 +8,7 @@ defmodule Indexer.Router do
   scope "/", Indexer do
     pipe_through :api
 
-    get "/by_lat_lon", SearchController, :search
+    get "/by_lat_lon", SearchController, :by_lat_lon
+    post "/cities", SearchController, :cities
   end
 end
