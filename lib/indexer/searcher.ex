@@ -8,7 +8,6 @@ defmodule Indexer.Searcher do
 
   def search(query) do
     query = :jiffy.encode(query, [:use_nil])
-    IO.puts query
 
     case HTTPoison.post(elasticsearch_url, query, [], http_options) do
       {:ok, %{status_code: 200, body: body}} ->
