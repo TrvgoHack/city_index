@@ -24,7 +24,7 @@ defmodule Indexer.SearchController do
     resp(conn, 200, json)
   end
 
-  def cities(%Plug.Conn{body_params: %{"coords" => coords}} = conn, params) do
+  def by_coords(%Plug.Conn{body_params: %{"coords" => coords}} = conn, params) do
     result = coords
     |> Enum.map(fn coord ->
       cities = Indexer.Searcher.lat_lon_search(coord["lat"], coord["lon"], coord["radius"])
@@ -46,6 +46,24 @@ defmodule Indexer.SearchController do
     }
 
     json = :jiffy.encode(result, [:use_nil])
+    resp(conn, 200, json)
+  end
+
+  def by_name(conn, %{"name" => name}) do
+    cities = Indexer.Searcher.name_search(name)
+    |> Enum.map(fn city ->
+      %{
+        name: city["_source"]["name"],
+        coord: city["_source"]["location"],
+        country_code: city["_source"]["country_code"]
+      }
+    end)
+
+    cities = %{
+      cities: cities
+    }
+
+    json = :jiffy.encode(cities, [:use_nil])
     resp(conn, 200, json)
   end
 end

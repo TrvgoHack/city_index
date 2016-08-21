@@ -7,7 +7,13 @@ defmodule Indexer.Searcher do
     body
   end
 
-  def search(query) do
+  def name_search(name) do
+    query = name_query(name)
+    {:ok, body} = search(query)
+    body
+  end
+
+  defp search(query) do
     query = :jiffy.encode(query, [:use_nil])
 
     case HTTPoison.post(elasticsearch_url, query, [], http_options) do
@@ -57,6 +63,22 @@ defmodule Indexer.Searcher do
               field_value_factor: %{
                 field: "population",
                 factor: 0.2
+              }
+            }
+          ]
+        }
+      }
+    }
+  end
+
+  defp name_query(name) do
+    %{
+      query: %{
+        bool: %{
+          must: [
+            %{
+              query_string: %{
+                query: name
               }
             }
           ]
