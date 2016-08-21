@@ -31,7 +31,8 @@ defmodule Indexer.SearchController do
       |> Enum.map(fn city ->
         %{
           name: city["_source"]["name"],
-          coord: city["_source"]["location"]
+          coord: city["_source"]["location"],
+          country_code: city["_source"]["country_code"]
         }
       end)
       %{
